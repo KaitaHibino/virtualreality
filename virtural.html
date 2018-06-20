@@ -5,14 +5,14 @@
     <script src="aframe.min.js"></script>
     <script>
 
-    AFRAME.registerComponent('raycaster-autorefresh', {
-      init: function () {
-        var el = this.el;
-        this.el.addEventListener('model-loaded', function () {
-          var cursorEl = el.querySelector('[raycaster]');
-          cursorEl.components.raycaster.refreshObjects();
-        });
-      }
+     AFRAME.registerComponent('raycaster-autorefresh', { 
+      init: function () { 
+        var el = this.el; 
+        this.el.addEventListener('model-loaded', function () { 
+          var cursorEl = el.querySelector('[raycaster]'); 
+          cursorEl.components.raycaster.refreshObjects(); 
+        }); 
+      } 
     });
 
     AFRAME.registerComponent('fusable', {
@@ -29,32 +29,56 @@
 	}
 });
 
-		AFRAME.registerComponent('door-listener', {
-	init: function () {
-	var el = this.el;
-		this.el.addEventListener('click', function (evt) {
-	var camera = document.querySelector('a-camera');
-		el.dispatchEvent(new Event('open-door'));
-		});
-	}
+			AFRAME.registerComponent('door-listener', {
+    init: function () {
+    var el = this.el;
+      this.el.addEventListener('click', function (evt) {
+    var camera = document.querySelector('a-camera');
+    el.dispatchEvent(new Event('open-door'));
+    });
+  }
 });
-			AFRAME.registerComponent('can-pickup', {
-		init: function () {
-			this.click = this.click.bind(this);
-			this.el.addEventListener('click', this.click);
-		},
-		click: function(e){
-		var activeItem = document.querySelector('#active-item');
-		if(activeItem !== this.el) {
-			setActiveItem(this.el);
-		}
-	   },
-		remove: function() {
-			this.el.removeEventListener('click', this.click);
-		}
-	}); 
 
-		function setActiveItem(item) {
+      AFRAME.registerComponent('can-pickup', {
+    init: function () {
+      this.click = this.click.bind(this);
+      this.el.addEventListener('click', this.click);
+    },
+    click: function(e){
+    var activeItem = document.querySelector('#active-item');
+    if(activeItem !== this.el) {
+      setActiveItem(this.el);
+    }
+  },
+    remove: function() {
+      this.el.removeEventListener('click', this.click);
+    }
+  }); 
+    	AFRAME.registerComponent('flashlight-listener', {
+    init: function () {
+      this.activate = this.activate.bind(this);
+      this.deactivate = this.deactivate.bind(this);
+      this.el.addEventListener('activate-item', this.activate)
+      this.el.addEventListener('deactivate-item', this.deactivate)
+    },
+    activate: function(){
+    var light = document.querySelector('a-light');
+    if(light) {
+      light.setAttribute('intensity', '1.0');
+    }
+    },
+    deactivate: function(){
+    var light = document.querySelector('a-light');
+    if(light) {
+      light.setAttribute('intensity', '0.0');
+    }
+    },
+    remove: function() {
+      this.el.removeEventListener('activate', this.activate);
+      this.el.removeEventListener('deactivate', this.deactivate);
+    }
+    }); 
+    function setActiveItem(item) {
 			item.setAttribute('id', 'active-item');
 		var camera = document.querySelector('a-camera');
 			camera.appendChild(item);
@@ -63,20 +87,20 @@
 			item.setAttribute('scale', '0.1 0.1 0.1');
 			item.dispatchEvent(new Event('activate-item'));
 		} 
+
+
     </script>
   </head>
   <body>
     <a-scene raycaster-autorefresh>
+     
       <a-assets>
-        <a-asset-item id="sofa" src="resources/burlap_sofa.gltf"></a-asset-item>
-        <a-asset-item id="wall" src="resources/wall.gltf"></a-asset-item>
-<!-- ===== START NEW CODE - Lesson 3 ===== -->      
-        <a-asset-item id="door" src="resources/door.gltf"></a-asset-item>
-<!-- ===== END NEW CODE ===== -->
-        <img id="carpet" src="resources/carpet.jpg">
-        <a-asset-item id="EDIT ME" src="resources/door.gltf"></a-asset-item> 
-      <a-asset-item id="key" src="resources/key.gltf"></a-asset-item> 
-      </a-assets>
+      <a-asset-item id="wall" src="resources/wall.gltf"></a-asset-item>
+      <img id="carpet" src="resources/carpet.jpg">
+      <a-asset-item id="sofa" src="resources/burlap_sofa.gltf"></a-asset-item>
+      <a-asset-item id="door" src="resources/door.gltf"></a-asset-item>
+      <a-asset-item id="key" src="resources/key.gltf"></a-asset-item>
+      <a-asset-item id="flashlight" src="resources/flashlight.gltf"></a-asset-item> </a-assets> 
 
       <a-light type="directional" color="#fff" intensity="0.8" position="2 5 0" rotation="0 0 0"></a-light>
       <a-sky color="#ccc"></a-sky>
@@ -103,10 +127,15 @@
       <a-gltf-model scale="1.7 1.7 1.7" position="-3.7 1.5 -2" rotation="0 90 0" src="#sofa" shadow></a-gltf-model> 
       <a-gltf-model scale="1.7 1.7 1.7" position="0.2 1.5 -5.6" rotation="0 0 0" src="#wall" shadow></a-gltf-model>
 
-<!-- ===== START NEW CODE - Lesson 3 ===== -->
-      <a-gltf-model scale="1.7 1.7 1.7" position="-2.05 1.5 -5.7" rotation="0 -180 0" src="#door" door-listener fusable clickable shadow>
+            <!-- GLTF Images -->
+      <a-gltf-model scale="1.7 1.7 1.7" position="0.2 1.5 -5.6" rotation="0 0 0" src="#wall" shadow></a-gltf-model> 
+      <a-gltf-model scale="1.7 1.7 1.7" position="-3.7 1.5 -2" rotation="0 90 0" src="#sofa" shadow></a-gltf-model> 
+      <a-gltf-model scale="1.7 1.7 1.7" position="-2.05 1.5 -5.7" rotation="0 -180 0" src="#door" door-listener fusable clickable shadow></a-gltf-model> 
       <a-gltf-model type="key" position="-3 1.5 0.1" rotation="0 50 0" scale="0.1 0.1 0.1" src="#key" shadow can-pickup fusable></a-gltf-model> 
-
+      <a-gltf-model position="-1 1.5 0" rotation="0 0 0" scale="0.1 0.1 0.1" src="#flashlight" shadow can-pickup fusable flashlight-listener></a-gltf-model> 
+      <a-light color="#fff" decay="0.2" angle="30" intensity="0.1" distance="12" rotation="0 0 0" position="0 5 0" type="point">
+      </a-light> 
+      
       <a-animation begin="open-door" attribute="rotation" to="0 -50 0" dur="1500"></a-animation>
 	  <a-animation begin="open-door" attribute="position" to="-2.05 1.5 -5.5" dur="1500"></a-animation> 
 <!-- ===== END NEW CODE ===== -->
