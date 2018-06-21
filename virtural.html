@@ -34,7 +34,11 @@
     var el = this.el;
       this.el.addEventListener('click', function (evt) {
     var camera = document.querySelector('a-camera');
+    var key = camera.querySelector('#active-item[type="key"]');
+    if(key) {
+    key.parentNode.removeChild(key);
     el.dispatchEvent(new Event('open-door'));
+    }
     });
   }
 });
@@ -224,12 +228,13 @@
       <a-box position="2 5.5 -5.8" rotation="0 180 0" depth=".05" width="8.3" height="8" color="beige" shadow></a-box>
       <a-box position="-2.7 7.2 -5.8" rotation="0 180 0" depth=".05" width="1.2" height="4.8" color="beige" shadow></a-box>
       <a-box position="-4 5.5 -5.8" rotation="0 180 0" depth=".05" width="1.5" height="8" color="beige" shadow></a-box> 
-
-s      <!-- Far wall Blacked Out-->
+      <!-- Far wall Blacked Out-->
       <a-box position="0 5.5 -14" rotation="0 0 0" depth=".05" width="8" height="8" color="brown" shadow></a-box> 
 
       <!-- TEXT -->
-      <a-text position="-2.5 5.5 -13.9" color="yellow" scale="6 6 6" value="You Win!"></a-text> 
+      
+
+      <a-text position="-2.5 5.5 -13.9" color="black" scale="6 6 6" value="You Win!"></a-text> 
 
       <a-gltf-model scale="1.7 1.7 1.7" position="-3.7 1.5 -2" rotation="0 90 0" src="#sofa" shadow></a-gltf-model> 
       <a-gltf-model scale="1.7 1.7 1.7" position="0.2 1.5 -5.6" rotation="0 0 0" src="#wall" shadow></a-gltf-model>
@@ -243,11 +248,10 @@ s      <!-- Far wall Blacked Out-->
 
     </a-gltf-model> 
       <a-gltf-model type="key" position="-3 1.5 0.1" rotation="0 50 0" scale="0.1 0.1 0.1" src="#key" shadow can-pickup fusable></a-gltf-model> 
-      <a-gltf-model position="-1 1.5 0" rotation="0 0 0" scale="0.1 0.1 0.1" src="#flashlight" shadow can-pickup fusable flashlight-listener></a-gltf-model> 
-      <a-light color="#fff" decay="0.2" angle="30" intensity="0.1" distance="12" rotation="0 0 0" position="0 5 0" type="point">
+      <a-gltf-model position="-1 1.5 0" rotation="0 0 0" scale="0.1 0.1 0.1" src="#flashlight" shadow can-pickup fusable flashlight-listener><a-light color="#fff" decay="0.2" angle="30" intensity="0.1" distance="12" rotation="0 0 0" position="0 5 0" type="point">
       </a-light> 
+      </a-gltf-model> 
       
-     
 <!-- ===== END NEW CODE ===== -->
 
 
